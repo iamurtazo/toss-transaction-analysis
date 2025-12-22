@@ -429,6 +429,41 @@ def plot_remarks_analysis(df, is_negative=True):
     plt.close()
     print(f"✅ {label_type.capitalize()} remarks chart saved")
 
+def create_hourly_histogram():
+    """Create bar chart histogram of transaction frequency by hour of day."""
+    print("📊 Creating hourly transaction histogram...")
+
+    # Read the data
+    df = pd.read_csv(CSV_OUTPUT)
+
+    # Combine Date and Time columns, then parse
+    df['DateTime'] = pd.to_datetime(df['Date'] + ' ' + df['Time'])
+    df['Hour'] = df['DateTime'].dt.hour
+
+    # Count transactions per hour
+    hourly_counts = df['Hour'].value_counts().sort_index()
+
+    # Create histogram
+    plt.figure(figsize=(14, 8))
+    plt.bar(hourly_counts.index, hourly_counts.values, color='#351c75', alpha=0.7)
+
+    plt.title('Transaction Frequency by Hour of Day', fontsize=16, fontweight='bold')
+    plt.xlabel('Hour of Day (24-hour format)', fontsize=14)
+    plt.ylabel('Number of Transactions', fontsize=14)
+
+    # Set x-axis to show all 24 hours
+    plt.xticks(range(0, 24))
+    plt.xlim(-0.5, 23.5)
+
+    # Add value labels on bars
+    for i, v in hourly_counts.items():
+        plt.text(i, v + 0.5, str(v), ha='center', va='bottom', fontweight='bold')
+
+    plt.tight_layout()
+    plt.savefig(f'{VISUALS_DIR}/hourly_transaction_histogram.png', dpi=300, bbox_inches='tight')
+    plt.close()
+    
+    print("✅ Hourly histogram saved!")
 
 # ============================================================================
 # MAIN EXECUTION
@@ -460,12 +495,8 @@ def main():
     plot_transaction_types(df)
     plot_remarks_analysis(df, is_negative=True)
     plot_remarks_analysis(df, is_negative=False)
+    create_hourly_histogram()
     
     print("\n" + "=" * 60)
     print("✅ ANALYSIS COMPLETE - All visualizations generated!")
     print("=" * 60)
-
-
-if __name__ == "__main__":
-    main()
-
