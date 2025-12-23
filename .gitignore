@@ -1,3 +1,6 @@
 /venv
 .DS_Store
 __pycache__
+formatted_transactions.xlsx
+latest_transactions.xlsx
+legacy.ipynb
