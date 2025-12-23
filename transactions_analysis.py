@@ -500,3 +500,7 @@ def main():
     print("\n" + "=" * 60)
     print("✅ ANALYSIS COMPLETE - All visualizations generated!")
     print("=" * 60)
+
+
+if __name__ == "__main__":
+    main()
